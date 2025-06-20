@@ -32,7 +32,7 @@ Feature: Party Authentication API Automation
 
   @CreateAndGetId
   Scenario: create user and get contactID
-    * def randomName = 'Iron Man 2223332'
+    * def randomName = 'Iron Man 2222233332'
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters'
     And request { "name": "#(randomName)", "alterego": "Tony Stark", "description": "Genius billionaire", "powers": ["Armor", "Flight"] }
     When method post
@@ -49,7 +49,14 @@ Feature: Party Authentication API Automation
     Then status 400
     And match response contains  { "name": "Name is required"}
 
-
+@PutError
+Scenario: put user error
+  * def randomName = 'Iron Man 222332322'
+  Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters/1'
+  And request { "name": "#(randomName)", "alterego": "Tony Stark", "description": "Genius billionaire", "powers": ["Armor", "Flight"] }
+  When method put
+  Then status 404
+  And match response contains  {"error":"Character not found"}
 
   @DeleteId
   Scenario: delete person error
