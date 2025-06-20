@@ -32,9 +32,10 @@ Feature: Party Authentication API Automation
 
   @CreateAndGetId
   Scenario: create user and get contactID
-    * def randomName = 'Iron Man 2222233332'
+    * def randomName = 'Iron Man 22223233332'
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters'
-    And request { "name": "#(randomName)", "alterego": "Tony Stark", "description": "Genius billionaire", "powers": ["Armor", "Flight"] }
+    Given def requestPayload = read('/data/person/AddPerson.json')
+    And request requestPayload
     When method post
     Then status 201
     And def contactId = response.id
@@ -44,7 +45,8 @@ Feature: Party Authentication API Automation
   @CreateAndError
   Scenario: create user error
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters'
-    And request { "name": "", "alterego": "", "description": "" }
+    Given def requestPayload = read('/data/person/AddErrorPerson.json')
+    And request requestPayload
     When method post
     Then status 400
     And match response contains  { "name": "Name is required"}
